@@ -50,6 +50,10 @@ Controls Overview
 Online Resources
 Subgames
 No-jumping blocks
+Minimap
+Radar
+Inventory shortcut
+Bouncy blocks
 
 # Misc. formspec captions
 Warning: You're not playing in singleplayer mode
@@ -132,7 +136,7 @@ Now since you probably now the basics, you may want to actually play or build so
 Minetest has 3 different views which determine the way you see the world.\nThe three modes are:\n\n- First-person view (default)\n- Third-person view from behind\n- Third-person view from the front\n\nYou can change the camera mode by pressing [F7] (but you have to close this\nwindow first).\n\nThere is also Cinematic Mode which can be toggled with [F8]. Normally, the\ncamera moves instantly as you move your mouse around. With Cinematic\nMode enabled, the camera movements become more smooth. Some players don't\nlike it, it is a matter of taste.\n\n   Switch camera mode: [F7]\n   Toggle Cinematic Mode: [F8]
 
 # Tutorial text: pointing1
-An important general concept in Minetest is pointing. As mentioned earlier,\nthere is a crosshair in the center of the screen.\n\nYou can point several things in Minetest:\n\n- Blocks\n- Dropped items\n- Other players\n- Many other things\n\nYou can only point one thing at once, or nothing at all. You can tell when\nyou point something if it is surrounded by a thin cuboid wireframe.\n\nTo point something, three conditions have to be met:\n1. The thing in question must be pointable at all\n2. Your crosshair must be exactly over the thing in question\n3. You must be close enough to the thing\n\nWhen a thing is pointed, you can do different stuff with it; e.g. collecting it,\npunching it, building to it, etc. We come to all that later.\n\nNow collect that apple from the small tree in front of this sign, and the gold bar.\nTo do that, you must point it and click with the left mouse button.
+An important general concept in Minetest is pointing. As mentioned earlier,\nthere is a crosshair in the center of the screen.\n\nYou can point several things in Minetest:\n\n- Blocks\n- Dropped items\n- Other players\n- Many other things\n\nYou can only point one thing at once, or nothing at all. You can tell when\nyou point something if it is surrounded by a thin cuboid wireframe or\nhighlighted (you can change the style in your settings).\n\nTo point something, three conditions have to be met:\n1. The thing in question must be pointable at all\n2. Your crosshair must be exactly over the thing in question\n3. You must be close enough to the thing\n\nWhen a thing is pointed, you can do different stuff with it; e.g. collecting it,\npunching it, building to it, etc. We come to all that later.\n\nNow collect that apple from the small tree in front of this sign, and the gold bar.\nTo do that, you must point it and click with the left mouse button.
 
 # Tutorial text: waterfall
 You can easily swim up this waterfall. Go into the water and hold the space bar until you're\nat the top\n\n   Swim forwards: [W]\n   Swim backwards: [S]\n   Swim leftwards: [A]\n   Swim rightwards: [D]\n   Swim upwards: [Space]\n   Swim downwards: [Shift]

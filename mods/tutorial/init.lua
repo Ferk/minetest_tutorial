@@ -471,7 +471,8 @@ You can point several things in Minetest:
 - Many other things
 
 You can only point one thing at once, or nothing at all. You can tell when
-you point something if it is surrounded by a thin cuboid wireframe.
+you point something if it is surrounded by a thin cuboid wireframe or
+highlighted (you can change the style in your settings).
 
 To point something, three conditions have to be met:
 1. The thing in question must be pointable at all
