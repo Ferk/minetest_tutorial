@@ -189,7 +189,7 @@ If you think you have enough of this tutorial, you can leave at any time. There 
 These are wooden planks. In the tutorial, you can only mine those blocks with an axe.\nWooden planks drop themselves.\n\nIn Minetest, we use the term "mining" in a general sense, regardless of the material.
 
 # Tutorial text: first_gold
-You have collected your first gold ingot. Those will help you to keep track in this tutorial.\nThere are 14 gold ingots in this tutorial.\n\nThere is a gold ingot at every important station. If you collected all ingots, you are\ndone with the tutorial, but collecting the gold ingots is not mandatory.
+You have collected your first gold ingot. Those will help you to keep track in this tutorial.\nThere are 13 gold ingots in this tutorial.\n\nThere is a gold ingot at every important station. If you collected all ingots, you are\ndone with the tutorial, but collecting the gold ingots is not mandatory.
 
 # Tutorial text: craft3
 Do you got your dough? Good.\n\nYou may have noticed that crafting always consumes one item from each occupied slot\nof the crafting grid. This is true for all crafting recipes.\nYou can speed crafting up a bit when you click with the middle mouse button on the\nitem in the output slot. Doing so will attempt to do the same craft up to 10 times,\ninstead of just once.\n\nFeel free to try it with the remaining wheat or just go on with the next sign.
@@ -274,3 +274,4 @@ By the way, if you are tired of clicking, there is a little convenience\nfeature
 
 # Tutorial text: bouncy
 Whee! The blocks will make you bounce if you jump on them. They also can bounce\nyou from the side, if you are fast enough.
+

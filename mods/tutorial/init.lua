@@ -836,7 +836,7 @@ careful next time.]]
 
 tutorial.texts.first_gold =
 [[You have collected your first gold ingot. Those will help you to keep track in this tutorial.
-There are 14 gold ingots in this tutorial.
+There are 13 gold ingots in this tutorial.
 
 There is a gold ingot at every important station. If you collected all ingots, you are
 done with the tutorial, but collecting the gold ingots is not mandatory.]]
