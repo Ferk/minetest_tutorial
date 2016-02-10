@@ -48,6 +48,8 @@ default.gui_suvival_form = "size[8,8.5]"..
 			"label[6.75,0.9;"..minetest.formspec_escape(S("Output slot:")).."]"..
 			"list[current_player;craftpreview;6.75,1.5;1,1;]"..
 			"image[5.75,1.5;1,1;gui_furnace_arrow_bg.png^[transformR270]"..
+			"listring[current_player;main]"..
+			"listring[current_player;craft]"..
 			default.get_hotbar_bg(0,4.25)
 
 -- Load files

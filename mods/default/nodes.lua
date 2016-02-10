@@ -260,6 +260,8 @@ function default.chest_formspec()
 	"label[0,4.35;"..minetest.formspec_escape(S("Player inventory:")).."]"..
 	"list[current_player;main;0,4.85;8,1;]"..
 	"list[current_player;main;0,6.08;8,3;8]"..
+	"listring[current_name;main]"..
+	"listring[current_player;main]"..
 	"label[0,9;"..default.gui_controls.."]"..
 	default.get_hotbar_bg(0,4.85)
 end
@@ -321,6 +323,10 @@ function default.furnace_active(pos, percent, item_percent)
 	"label[0,3.75;"..minetest.formspec_escape(S("Player inventory:")).."]"..
 	"list[current_player;main;0,4.25;8,1;]"..
 	"list[current_player;main;0,5.5;8,3;8]"..
+	"listring[current_name;dst]"..
+	"listring[current_player;main]"..
+	"listring[current_name;src]"..
+	"listring[current_player;main]"..
 	"label[0,8.4;"..default.gui_controls.."]"..
 	default.get_hotbar_bg(0,4.25)
     return formspec
@@ -361,6 +367,10 @@ default.furnace_inactive_formspec =
 	"label[0,3.75;"..minetest.formspec_escape(S("Player inventory:")).."]"..
 	"list[current_player;main;0,4.25;8,1;]"..
 	"list[current_player;main;0,5.5;8,3;8]"..
+	"listring[current_name;dst]"..
+	"listring[current_player;main]"..
+	"listring[current_name;src]"..
+	"listring[current_player;main]"..
 	"label[0,8.4;"..default.gui_controls.."]"..
 	default.get_hotbar_bg(0,4.25)
 
