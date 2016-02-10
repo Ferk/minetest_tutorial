@@ -159,11 +159,11 @@ Now feel free to walk around a bit and read the other signs to learn more.]]
 tutorial.texts.minetest =
 [[Minetest itself is not a game, it is a game engine.
 To be able to actually play it, you need something called a "Minetest game",
-sometimes also called "subgame" or just "game". In this tutorial, we use the term,
+sometimes also called "subgame" or just "game". In this tutorial, we use the term
 "subgame".
 
-Don't worry, Minetest comes pre-installed with a rather simple default subgame, oddly,
-also called "Minetest"
+Don't worry, Minetest comes pre-installed with a rather simple default subgame,
+called "Minetest Game".
 
 This tutorial teaches you the basics of Minetest (the engine), things which are true for
 all subgames. This tutorial does not teach you how to play a particular subgame, not
@@ -204,7 +204,7 @@ Unless you are sure no other players will join, you should
 leave now and start the tutorial in singleplayer mode.]]
 
 tutorial.texts.cam =
-[=[Minetest has 3 different camera modes which determine the way you see the world.
+[=[Minetest has 3 different views which determine the way you see the world.
 The three modes are:
 
 - First-person view (default)
@@ -214,7 +214,50 @@ The three modes are:
 You can change the camera mode by pressing [F7] (but you have to close this
 window first).
 
-   Switch camera mode: [F7]]=]
+There is also Cinematic Mode which can be toggled with [F8]. Normally, the
+camera moves instantly as you move your mouse around. With Cinematic
+Mode enabled, the camera movements become more smooth. Some players don't
+like it, it is a matter of taste.
+
+   Switch camera mode: [F7]
+   Toggle Cinematic Mode: [F8]]=]
+
+tutorial.texts.minimap =
+[=[Press the [F9] key to make a minimap appear on the top right.
+The minimap helps you to find your way around the world.
+Press it again to toggle through different minimap modes and zoom levels.
+
+There are 2 minimap modes and 3 zoom levels.
+
+Surface mode is a top-down view of the world, roughly resembling the
+colors of the blocks this world is made on. It only shows the topmost
+blocks, everything below is hidden, like a satellite photo. Surface
+mode is useful if you got lost.
+
+Radar mode is more complicated and will be explained on another sign.
+
+There are also two different direction modes. Normally, "up" on the minimap
+is always pointing to the North. But if you press [Shift]+[F9], the minimap
+will instead rotate with your looking direction, so "up" is always your
+looking direction.
+
+In some subgames, the minimap may be disabled.
+
+   Toggle minimap mode: [F9]
+   Toggle minimap rotating: [Shift]+[F9]]=]
+
+tutorial.texts.radar =
+[=[If you press [F9] a couple of times, you can enable radar mode,
+a mode of the minimap.
+
+In radar mode only shades of green are visible. The greenness roughly tells
+you how "dense" a nearby spot is. Green areas are have only a few blocks
+where black areas are very dense and have a lot of cubes stacked vertically.
+Radar mode is useful to find tunnels, caverns and ways hidden under the
+ground or behind walls.
+Sorry, in this tutorial, radar mode doesn't show you anything useful at the
+moment (but it is planned for later versions). Try out radar mode in
+subgames.]=]
 
 tutorial.texts.blocks =
 [[The world of Minetest is made entirely out of blocks, or voxels, to be precise.
@@ -238,6 +281,10 @@ the block it is attached to, it will drop as an item which you can collect.]]
 
 tutorial.texts.disable_jump =
 [[These nasty blocks on the floor prevent you from jumping when you stand on them.]]
+
+tutorial.texts.bouncy =
+[[Whee! The blocks will make you bounce if you jump on them. They also can bounce
+you from the side, if you are fast enough.]]
 
 tutorial.texts.runover =
 [[This abyss behind this sign is so small that you can even walk over it,
@@ -557,6 +604,16 @@ When you took an item stack in the inventory:
 You can also drop an item stack by holding it in the inventory, then clicking anywhere
 outside of the window.]]
 
+tutorial.texts.listrings =
+[=[By the way, if you are tired of clicking, there is a little convenience
+feature:
+Hold [Shift] while you left-click on an item stack in a menu to
+move it instantly to another relevant section. For example, in this tutorial
+you can use it to move an item stack from the chest into your inventory (and
+vice-versa) with a single click.
+
+   [Shift]+[Left click]: Move full item stack to other section in menu]=]
+
 tutorial.texts.chest =
 [[This is a chest. You can view its contents by right-clicking it. In the menu you will see
 two inventories, on the upper part the chest inventory and on the lower part the player
@@ -827,6 +884,8 @@ tutorial.texts.controls =
    Move downwards (ladder/liquid): [Shift]
 
    Toggle camera mode: [F7]
+   Toggle Cinematic Mode: [F8]
+   Toggle minimap mode: [F9]
 
    Select item in hotbar: [Mouse wheel]
    Select item in hotbar: [0] - [9]
@@ -872,6 +931,8 @@ If you do not understand IRC, see the Community Wiki for help.]]
 tutorial.register_infosign("intro", "Introduction", tutorial.texts.intro)
 tutorial.register_infosign("minetest", "Minetest", tutorial.texts.minetest)
 tutorial.register_infosign("cam", "Player Camera", tutorial.texts.cam)
+tutorial.register_infosign("minimap", "Minimap", tutorial.texts.minimap)
+tutorial.register_infosign("radar", "Radar", tutorial.texts.radar)
 tutorial.register_infosign("runover", "Small Abysses", tutorial.texts.runover)
 tutorial.register_infosign("jumpup", "Jumping (1)", tutorial.texts.jumpup)
 tutorial.register_infosign("jumpover", "Jumping (2)", tutorial.texts.jumpover)
@@ -895,6 +956,7 @@ tutorial.register_infosign("death", "Death and Respawning", tutorial.texts.death
 tutorial.register_infosign("items", "Items", tutorial.texts.items)
 tutorial.register_infosign("tools", "Tools", tutorial.texts.tools)
 tutorial.register_infosign("inventory", "Using the Inventory", tutorial.texts.inventory)
+tutorial.register_infosign("listrings", "Inventory shortcut", tutorial.texts.listrings)
 tutorial.register_infosign("chest", "Comment About Chests", tutorial.texts.chest)
 tutorial.register_infosign("build", "Building Some Blocks", tutorial.texts.build)
 tutorial.register_infosign("build_special", "Building at Usable Blocks", tutorial.texts.build_special)
@@ -907,6 +969,7 @@ tutorial.register_infosign("mine_glass", "Mining example: Weak glass", tutorial.
 tutorial.register_infosign("mine_immortal", "Unminable blocks", tutorial.texts.mine_immortal)
 tutorial.register_infosign("blocks", "Special blocks", tutorial.texts.blocks)
 tutorial.register_infosign("disable_jump", "No-jumping blocks", tutorial.texts.disable_jump)
+tutorial.register_infosign("bouncy", "Bouncy blocks", tutorial.texts.bouncy)
 tutorial.register_infosign("falling_node", "Falling blocks", tutorial.texts.falling_node)
 tutorial.register_infosign("attached_node", "Attached blocks", tutorial.texts.attached_node)
 tutorial.register_infosign("use", "Using blocks", tutorial.texts.use)
