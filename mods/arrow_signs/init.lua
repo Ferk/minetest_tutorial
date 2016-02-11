@@ -19,7 +19,7 @@ arrow_signs={}
 			minetest.chat_send_player(sender:get_player_name(), "error: you don't have permission to edit the sign. you need the interact priv")
 		return
 		end
-		local meta = minetest.env:get_meta(pos)
+		local meta = minetest.get_meta(pos)
 		fields.text = fields.text or ""
 		print((sender:get_player_name() or "").." wrote \""..fields.text..
 				"\" to sign at "..minetest.pos_to_string(pos))
@@ -79,8 +79,8 @@ minetest.register_node("arrow_signs:wall_right", {
 	legacy_wallmounted = true,
 	sounds = default.node_sound_defaults(),
 	on_construct = function(pos)
-		--local n = minetest.env:get_node(pos)
-		local meta = minetest.env:get_meta(pos)
+		--local n = minetest.get_node(pos)
+		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", "field[text;;${text}]")
 		meta:set_string("infotext", "\"\"")
 	end,
@@ -88,7 +88,7 @@ minetest.register_node("arrow_signs:wall_right", {
 		arrow_signs:savetext(pos, formname, fields, sender)
 	end,
 	on_punch = function(pos)
-		local meta = minetest.env:get_meta(pos)
+		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", "")
 	end,
 
@@ -115,8 +115,8 @@ minetest.register_node("arrow_signs:wall_left", {
 	legacy_wallmounted = true,
 	sounds = default.node_sound_defaults(),
 	on_construct = function(pos)
-		--local n = minetest.env:get_node(pos)
-		local meta = minetest.env:get_meta(pos)
+		--local n = minetest.get_node(pos)
+		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", "field[text;;${text}]")
 		meta:set_string("infotext", "\"\"")
 	end,
@@ -124,7 +124,7 @@ minetest.register_node("arrow_signs:wall_left", {
 		arrow_signs:savetext(pos, formname, fields, sender)
 	end,
 	on_punch = function(pos)
-		local meta = minetest.env:get_meta(pos)
+		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", "")
 	end,
 })
@@ -150,8 +150,8 @@ minetest.register_node("arrow_signs:wall_up", {
 	legacy_wallmounted = true,
 	sounds = default.node_sound_defaults(),
 	on_construct = function(pos)
-		--local n = minetest.env:get_node(pos)
-		local meta = minetest.env:get_meta(pos)
+		--local n = minetest.get_node(pos)
+		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", "field[text;;${text}]")
 		meta:set_string("infotext", "\"\"")
 	end,
@@ -159,7 +159,7 @@ minetest.register_node("arrow_signs:wall_up", {
 		arrow_signs:savetext(pos, formname, fields, sender)
 	end,
 	on_punch = function(pos)
-		local meta = minetest.env:get_meta(pos)
+		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", "")
 	end,
 })
@@ -185,8 +185,8 @@ minetest.register_node("arrow_signs:wall_down", {
 	legacy_wallmounted = true,
 	sounds = default.node_sound_defaults(),
 	on_construct = function(pos)
-		--local n = minetest.env:get_node(pos)
-		local meta = minetest.env:get_meta(pos)
+		--local n = minetest.get_node(pos)
+		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", "field[text;;${text}]")
 		meta:set_string("infotext", "\"\"")
 	end,
@@ -194,7 +194,7 @@ minetest.register_node("arrow_signs:wall_down", {
 		arrow_signs:savetext(pos, formname, fields, sender)
 	end,
 	on_punch = function(pos)
-		local meta = minetest.env:get_meta(pos)
+		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", "")
 	end,
 })
