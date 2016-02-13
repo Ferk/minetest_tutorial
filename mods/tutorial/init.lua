@@ -13,13 +13,14 @@ end
 function tutorial.save_state()
 	local str = minetest.serialize(tutorial.state)
 	local filepath = minetest.get_worldpath().."/tutorialdata.mt"
-	local file = io.open(filepath, "w")
+	local file = io.open(filepath, "w+")
 	if(file) then
 		file:write(str)
 		minetest.log("action", "[tutorial] Tutorial state has been written into "..filepath..".")
 	else
 		minetest.log("error", "[tutorial] An attempt to save the tutorial state into "..filepath.." failed.")
 	end
+	io.close(file)
 end
 
 
@@ -1200,24 +1201,21 @@ minetest.register_on_joinplayer(function(player)
 		"button_exit[2.5,5.5;3,1;close;"..minetest.formspec_escape(S("Continue anyways")).."]"..
 		"button_exit[6.5,5.5;3,1;leave;"..minetest.formspec_escape(S("Leave tutorial")).."]"
 
-	else
-		if(tutorial.state.first_join==true) then
-			formspec = "size[12,6]"..
-			"label[-0.15,-0.4;"..minetest.formspec_escape(S("Introduction")).."]"..
-			"tablecolumns[text]"..
-			"tableoptions[background=#000000;highlight=#000000;border=false]"..
-			"table[0,0.25;12,5.2;intro_text;"..
-			tutorial.convert_newlines(minetest.formspec_escape(S(tutorial.texts.intro)))..
-			"]"..
-			"button_exit[4.5,5.5;3,1;close;"..minetest.formspec_escape(S("Close")).."]"
-
-			if tutorial.first_spawn then
-				player:setpos(tutorial.first_spawn.pos)
-				player:set_look_yaw(tutorial.first_spawn.yaw)
-			end
-		end
+	elseif(tutorial.state.first_join==true) then
+		formspec = "size[12,6]"..
+		"label[-0.15,-0.4;"..minetest.formspec_escape(S("Introduction")).."]"..
+		"tablecolumns[text]"..
+		"tableoptions[background=#000000;highlight=#000000;border=false]"..
+		"table[0,0.25;12,5.2;intro_text;"..
+		tutorial.convert_newlines(minetest.formspec_escape(S(tutorial.texts.intro)))..
+		"]"..
+		"button_exit[4.5,5.5;3,1;close;"..minetest.formspec_escape(S("Close")).."]"
 		tutorial.state.first_join = false
 		tutorial.save_state()
+	end
+	if tutorial.first_spawn then
+		player:setpos(tutorial.first_spawn.pos)
+		player:set_look_yaw(tutorial.first_spawn.yaw)
 	end
 	if(formspec~=nil) then
 		minetest.show_formspec(player:get_player_name(), "intro", formspec)
@@ -1360,7 +1358,7 @@ end
 
 function tutorial.extract_texts()
 	local filepath = minetest.get_modpath("tutorial").."/locale/template_texts.txt"
-	local file = io.open(filepath, "w")
+	local file = io.open(filepath, "w+")
 	if(file) then
 		for k,v in pairs(tutorial.texts) do
 			file:write("# Tutorial text: "..k.."\n")
