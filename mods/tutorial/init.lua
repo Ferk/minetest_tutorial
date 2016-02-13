@@ -234,7 +234,12 @@ colors of the blocks this world is made on. It only shows the topmost
 blocks, everything below is hidden, like a satellite photo. Surface
 mode is useful if you got lost.
 
-Radar mode is more complicated and will be explained on another sign.
+Radar mode is more complicated. It displays the "denseness" of the area
+around you and changes with your height. Roughly, the more green an
+area is, the less "dense" it is. Black areas have many blocks. Use
+the radar to find caverns, hidden areas, walls and more. Currently,
+radar mode does not work in the tutorial. Sorry, you have to try it
+out in subgames.
 
 There are also two different direction modes. Normally, "up" on the minimap
 is always pointing to the North. But if you press [Shift]+[F9], the minimap
@@ -245,19 +250,6 @@ In some subgames, the minimap may be disabled.
 
    Toggle minimap mode: [F9]
    Toggle minimap rotating: [Shift]+[F9]]=]
-
-tutorial.texts.radar =
-[=[If you press [F9] a couple of times, you can enable radar mode,
-a mode of the minimap.
-
-In radar mode only shades of green are visible. The greenness roughly tells
-you how "dense" a nearby spot is. Green areas are have only a few blocks
-where black areas are very dense and have a lot of cubes stacked vertically.
-Radar mode is useful to find tunnels, caverns and ways hidden under the
-ground or behind walls.
-Sorry, in this tutorial, radar mode doesn't show you anything useful at the
-moment (but it is planned for later versions). Try out radar mode in
-subgames.]=]
 
 tutorial.texts.blocks =
 [[The world of Minetest is made entirely out of blocks, or voxels, to be precise.
@@ -933,7 +925,6 @@ tutorial.register_infosign("intro", "Introduction", tutorial.texts.intro)
 tutorial.register_infosign("minetest", "Minetest", tutorial.texts.minetest)
 tutorial.register_infosign("cam", "Player Camera", tutorial.texts.cam)
 tutorial.register_infosign("minimap", "Minimap", tutorial.texts.minimap)
-tutorial.register_infosign("radar", "Radar", tutorial.texts.radar)
 tutorial.register_infosign("runover", "Small Abysses", tutorial.texts.runover)
 tutorial.register_infosign("jumpup", "Jumping (1)", tutorial.texts.jumpup)
 tutorial.register_infosign("jumpover", "Jumping (2)", tutorial.texts.jumpover)
