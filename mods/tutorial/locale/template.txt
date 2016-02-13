@@ -51,7 +51,6 @@ Online Resources
 Subgames
 No-jumping blocks
 Minimap
-Radar
 Inventory shortcut
 Bouncy blocks
 
