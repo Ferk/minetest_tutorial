@@ -13,8 +13,16 @@ minetest.register_node("supplemental:sticky", {
 		"default_stone_brick.png", "default_stone_brick.png", "default_stone_brick.png",
 		"default_stone_brick.png", "default_stone_brick.png"},
 	groups = {immortal=1, disable_jump=1},
+})
+
+minetest.register_node("supplemental:bouncy", {
+	description = S("bouncy block"),
+	tiles = {"supplemental_bouncy.png"},
+	groups = {immortal=1, bouncy=70, fall_damage_add_percent=-100},
 	sounds = default.node_sound_stone_defaults()
 })
+
+
 
 minetest.register_node("supplemental:conglomerate", {
 	description = S("conglomerate"),
