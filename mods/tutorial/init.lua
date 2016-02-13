@@ -1087,6 +1087,105 @@ minetest.register_node("tutorial:ruler", {
 	groups = {immortal=1, attached_node=1},
 })
 
+-- Crafting guides (example crafting images at crafting section)
+minetest.register_node("tutorial:craftguide_paper", {
+	description = S("crafting guide: paper"),
+	drawtype = "signlike",
+	selection_box = {
+		type = "wallmounted",
+		wall_side = { -0.5, -0.5, -0.5, -0.4, 0.5, 0.5 },
+	},
+	walkable = false,
+	tiles = { "tutorial_craftguide_paper_white.png" },
+	inventory_image = "tutorial_craftguide_paper_white.png",
+	wield_image = "tutorial_craftguide_paper_white.png",
+	paramtype = "light",
+	paramtype2 = "wallmounted",
+	sunlight_propagates = true,
+	groups = {immortal=1, attached_node=1},
+})
+
+minetest.register_node("tutorial:craftguide_paper_color", {
+	description = S("crafting guide: colored paper"),
+	drawtype = "signlike",
+	selection_box = {
+		type = "wallmounted",
+		wall_side = { -0.5, -0.5, -0.5, -0.4, 0.5, 0.5 },
+	},
+	walkable = false,
+	tiles = {
+		{
+			name = "tutorial_craftguide_paper_color_anim.png",
+			animation = {
+				type = "vertical_frames",
+				aspect_w = 32,
+				aspect_h = 32,
+				length = 16.0,
+			},
+		}
+	},
+	inventory_image = "tutorial_craftguide_paper_color.png",
+	wield_image = "tutorial_craftguide_paper_color.png",
+	paramtype = "light",
+	paramtype2 = "wallmounted",
+	sunlight_propagates = true,
+	groups = {immortal=1, attached_node=1},
+})
+
+minetest.register_node("tutorial:craftguide_wheat", {
+	description = S("crafting guide: wheat"),
+	drawtype = "signlike",
+	selection_box = {
+		type = "wallmounted",
+		wall_side = { -0.5, -0.5, -0.5, -0.4, 0.5, 0.5 },
+	},
+	walkable = false,
+	tiles = {
+		{
+			name = "tutorial_craftguide_wheat_anim.png",
+			animation = {
+				type = "vertical_frames",
+				aspect_w = 32,
+				aspect_h = 32,
+				length = 12.0,
+			},
+		}
+	},
+	inventory_image = "tutorial_craftguide_wheat.png",
+	wield_image = "tutorial_craftguide_wheat.png",
+	paramtype = "light",
+	paramtype2 = "wallmounted",
+	sunlight_propagates = true,
+	groups = {immortal=1, attached_node=1},
+})
+
+minetest.register_node("tutorial:craftguide_repair", {
+	description = S("crafting guide: tool repair"),
+	drawtype = "signlike",
+	selection_box = {
+		type = "wallmounted",
+		wall_side = { -0.5, -0.5, -0.5, -0.4, 0.5, 0.5 },
+	},
+	walkable = false,
+	tiles = {
+		{
+			name = "tutorial_craftguide_repair_anim.png",
+			animation = {
+				type = "vertical_frames",
+				aspect_w = 32,
+				aspect_h = 32,
+				length = 12.0,
+			},
+		}
+	},
+	inventory_image = "tutorial_craftguide_repair.png",
+	wield_image = "tutorial_craftguide_repair.png",
+	paramtype = "light",
+	paramtype2 = "wallmounted",
+	sunlight_propagates = true,
+	groups = {immortal=1, attached_node=1},
+})
+
 
 --[[ Tutorial cups, awarded for achievements ]]
 tutorial.cupnodebox = {
