@@ -67,6 +67,9 @@ You have collected all hidden diamonds!
 # Sign infotext (%s is replaced with sign caption
 %s (Right-click to read)
 
+# Craft guide infotext
+This is a crafting example.
+
 # Awards
 golden cup
 diamond cup

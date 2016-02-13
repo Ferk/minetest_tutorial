@@ -66,6 +66,9 @@ You have collected all hidden diamonds! = Sie haben alle versteckten Diamanten g
 # Sign infotext (%s is replaced with sign caption
 %s (Right-click to read) = %s (Rechtsklick zum Lesen)
 
+# Craft guide infotext
+This is a crafting example. = Dies ist ein Fertigungsbeispiel.
+
 # Awards
 golden cup = Goldpokal
 diamond cup = Diamantpokal

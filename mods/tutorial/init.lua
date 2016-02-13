@@ -1090,104 +1090,61 @@ minetest.register_node("tutorial:ruler", {
 })
 
 -- Crafting guides (example crafting images at crafting section)
-minetest.register_node("tutorial:craftguide_paper", {
-	description = S("crafting example: white paper"),
-	drawtype = "signlike",
-	selection_box = {
-		type = "wallmounted",
-		wall_side = { -0.5, -0.5, -0.5, -0.4, 0.5, 0.5 },
-	},
-	walkable = false,
-	tiles = { "tutorial_craftguide_paper_white.png" },
-	inventory_image = "tutorial_craftguide_paper_white.png",
-	wield_image = "tutorial_craftguide_paper_white.png",
-	paramtype = "light",
-	paramtype2 = "wallmounted",
-	sunlight_propagates = true,
-	groups = {immortal=1, attached_node=1},
-})
+function tutorial.craftguideinfo(pos)
+	local meta = minetest.get_meta(pos)
+	meta:set_string("infotext", S("This is a crafting example."))
+end
 
-minetest.register_node("tutorial:craftguide_paper_color", {
-	description = S("crafting example: colored paper"),
-	drawtype = "signlike",
-	selection_box = {
-		type = "wallmounted",
-		wall_side = { -0.5, -0.5, -0.5, -0.4, 0.5, 0.5 },
-	},
-	walkable = false,
-	tiles = {
-		{
-			name = "tutorial_craftguide_paper_color_anim.png",
-			animation = {
-				type = "vertical_frames",
-				aspect_w = 32,
-				aspect_h = 32,
-				length = 16.0,
-			},
+function tutorial.register_craftguide(subId, desc, imageStatic, imageAnim, animFrames)
+	local id = "tutorial:craftguide_"..subId
+
+	local tiles
+	if imageAnim ~= nil then
+		tiles = {
+			{
+				name = imageAnim,
+				animation = {
+					type = "vertical_frames",
+					aspect_w = 32,
+					aspect_h = 32,
+					length = animFrames * 4.0,
+				},
+			}
 		}
-	},
-	inventory_image = "tutorial_craftguide_paper_color.png",
-	wield_image = "tutorial_craftguide_paper_color.png",
-	paramtype = "light",
-	paramtype2 = "wallmounted",
-	sunlight_propagates = true,
-	groups = {immortal=1, attached_node=1},
-})
+	else
+		tiles = { imageStatic }
+	end
 
-minetest.register_node("tutorial:craftguide_wheat", {
-	description = S("crafting example: wheat"),
-	drawtype = "signlike",
-	selection_box = {
-		type = "wallmounted",
-		wall_side = { -0.5, -0.5, -0.5, -0.4, 0.5, 0.5 },
-	},
-	walkable = false,
-	tiles = {
-		{
-			name = "tutorial_craftguide_wheat_anim.png",
-			animation = {
-				type = "vertical_frames",
-				aspect_w = 32,
-				aspect_h = 32,
-				length = 12.0,
-			},
-		}
-	},
-	inventory_image = "tutorial_craftguide_wheat.png",
-	wield_image = "tutorial_craftguide_wheat.png",
-	paramtype = "light",
-	paramtype2 = "wallmounted",
-	sunlight_propagates = true,
-	groups = {immortal=1, attached_node=1},
-})
+	minetest.register_node(id, {
+		description = desc,
+		drawtype = "signlike",
+		selection_box = {
+			type = "wallmounted",
+			wall_side = { -0.5, -0.5, -0.5, -0.4, 0.5, 0.5 },
+		},
+		walkable = false,
+		tiles = tiles,
+	inventory_image = imageStatic,
+		wield_image = imageStatic,
+		paramtype = "light",
+		paramtype2 = "wallmounted",
+		sunlight_propagates = true,
+		groups = {immortal=1, attached_node=1},
+		on_construct = tutorial.craftguideinfo,
+	})
 
-minetest.register_node("tutorial:craftguide_repair", {
-	description = S("crafting example: tool repair"),
-	drawtype = "signlike",
-	selection_box = {
-		type = "wallmounted",
-		wall_side = { -0.5, -0.5, -0.5, -0.4, 0.5, 0.5 },
-	},
-	walkable = false,
-	tiles = {
-		{
-			name = "tutorial_craftguide_repair_anim.png",
-			animation = {
-				type = "vertical_frames",
-				aspect_w = 32,
-				aspect_h = 32,
-				length = 12.0,
-			},
-		}
-	},
-	inventory_image = "tutorial_craftguide_repair.png",
-	wield_image = "tutorial_craftguide_repair.png",
-	paramtype = "light",
-	paramtype2 = "wallmounted",
-	sunlight_propagates = true,
-	groups = {immortal=1, attached_node=1},
-})
+	minetest.register_abm({
+		nodenames = id,
+		interval = 5,
+		chance = 1,
+		action = tutorial.craftguideinfo,
+	})
+end
 
+tutorial.register_craftguide("paper", S("crafting example: white paper"), "tutorial_craftguide_paper_white.png")
+tutorial.register_craftguide("wheat", S("crafting example: wheat"), "tutorial_craftguide_wheat.png", "tutorial_craftguide_wheat_anim.png", 3)
+tutorial.register_craftguide("paper_color", S("crafting example: colored paper"), "tutorial_craftguide_paper_color.png", "tutorial_craftguide_paper_color_anim.png", 4)
+tutorial.register_craftguide("repair", S("crafting example: tool repair"), "tutorial_craftguide_repair.png", "tutorial_craftguide_repair_anim.png", 3)
 
 --[[ Tutorial cups, awarded for achievements ]]
 tutorial.cupnodebox = {
@@ -1222,6 +1179,7 @@ function tutorial.diamondinfo(pos)
 	local meta = minetest.get_meta(pos)
 	meta:set_string("infotext", S("This diamond cup has been awarded for collecting all hidden diamonds."))
 end
+
 
 --[[ awarded for collecting all gold ingots ]]
 minetest.register_node("tutorial:cup_gold", {
