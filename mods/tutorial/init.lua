@@ -41,8 +41,10 @@ end
 if(read==false) then
 	tutorial.state = {}
 
-	-- Is this the first time the player joins this tutorial?
+	-- Is this the first time the player joins this tutorial? (used for spawn position)
 	tutorial.state.first_join = true
+	-- Has the regular introduction text been shown yet?
+	tutorial.state.intro_text = false
 	-- These variables store wheather a message for those events has been shown yet.
 	tutorial.state.first_gold = false
 	tutorial.state.last_gold = false
@@ -1300,7 +1302,7 @@ minetest.register_on_joinplayer(function(player)
 		"button_exit[2.5,5.5;3,1;close;"..minetest.formspec_escape(S("Continue anyways")).."]"..
 		"button_exit[6.5,5.5;3,1;leave;"..minetest.formspec_escape(S("Leave tutorial")).."]"
 
-	elseif(tutorial.state.first_join==true) then
+	elseif(tutorial.state.intro_text == false) then
 		formspec = "size[12,6]"..
 		"label[-0.15,-0.4;"..minetest.formspec_escape(S("Introduction")).."]"..
 		"tablecolumns[text]"..
@@ -1309,13 +1311,14 @@ minetest.register_on_joinplayer(function(player)
 		tutorial.convert_newlines(minetest.formspec_escape(S(tutorial.texts.intro)))..
 		"]"..
 		"button_exit[4.5,5.5;3,1;close;"..minetest.formspec_escape(S("Close")).."]"
-		tutorial.state.first_join = false
-		tutorial.save_state()
+		tutorial.state.intro_text = true
 	end
-	if tutorial.first_spawn then
+	if tutorial.state.first_join==true and tutorial.first_spawn then
 		player:setpos(tutorial.first_spawn.pos)
 		player:set_look_yaw(tutorial.first_spawn.yaw)
+		tutorial.state.first_join = false
 	end
+	tutorial.save_state()
 	if(formspec~=nil) then
 		minetest.show_formspec(player:get_player_name(), "intro", formspec)
 	end
