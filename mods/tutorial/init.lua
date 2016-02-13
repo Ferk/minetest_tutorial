@@ -1091,7 +1091,7 @@ minetest.register_node("tutorial:ruler", {
 
 -- Crafting guides (example crafting images at crafting section)
 minetest.register_node("tutorial:craftguide_paper", {
-	description = S("crafting guide: paper"),
+	description = S("crafting example: white paper"),
 	drawtype = "signlike",
 	selection_box = {
 		type = "wallmounted",
@@ -1108,7 +1108,7 @@ minetest.register_node("tutorial:craftguide_paper", {
 })
 
 minetest.register_node("tutorial:craftguide_paper_color", {
-	description = S("crafting guide: colored paper"),
+	description = S("crafting example: colored paper"),
 	drawtype = "signlike",
 	selection_box = {
 		type = "wallmounted",
@@ -1135,7 +1135,7 @@ minetest.register_node("tutorial:craftguide_paper_color", {
 })
 
 minetest.register_node("tutorial:craftguide_wheat", {
-	description = S("crafting guide: wheat"),
+	description = S("crafting example: wheat"),
 	drawtype = "signlike",
 	selection_box = {
 		type = "wallmounted",
@@ -1162,7 +1162,7 @@ minetest.register_node("tutorial:craftguide_wheat", {
 })
 
 minetest.register_node("tutorial:craftguide_repair", {
-	description = S("crafting guide: tool repair"),
+	description = S("crafting example: tool repair"),
 	drawtype = "signlike",
 	selection_box = {
 		type = "wallmounted",
