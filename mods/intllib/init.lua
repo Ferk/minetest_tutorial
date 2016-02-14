@@ -9,6 +9,7 @@ dofile(MP.."/lib.lua")
 local strings = {}
 
 local LANG = minetest.setting_get("language")
+if not (LANG and (LANG ~= "")) then LANG = os.getenv("LANGUAGE") end
 if not (LANG and (LANG ~= "")) then LANG = os.getenv("LANG") end
 if not (LANG and (LANG ~= "")) then LANG = "en" end
 LANG = LANG:sub(1, 2)
