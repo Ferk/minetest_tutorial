@@ -3,6 +3,8 @@
 -- Directory where the map data will be stored
 tutorial.map_directory = minetest.get_modpath("tutorial").."/mapdata/"
 
+local insecure_environment = minetest.request_insecure_environment()
+
 -- entity management functions
 
 function save_entities()
@@ -47,7 +49,7 @@ function save_entities()
 	local str = minetest.serialize(entities)
 
 	local filename = tutorial.map_directory .. "entities"
-	local file, err = io.open(filename, "wb")
+	local file, err = insecure_environment.io.open(filename, "wb")
 	if err ~= nil then
 		error("Couldn't write to \"" .. filename .. "\"")
 	end
@@ -273,7 +275,7 @@ function save_region(minp, maxp, probability_list, filename, slice_prob_list)
 		-- Serialize entries
 		result = minetest.serialize(result)
 
-		local file, err = io.open(filename..".meta", "wb")
+		local file, err = insecure_environment.io.open(filename..".meta", "wb")
 		if err ~= nil then
 			error("Couldn't write to \"" .. filename .. "\"")
 		end
@@ -375,31 +377,34 @@ minetest.register_chatcommand("treset", {
 	end,
 })
 
-minetest.register_chatcommand("tsave", {
-	params = "",
-	description = "Saves the tutorial map",
-	privs = {tutorialmap=true},
-	func = function(name, param)
-		if save_schematic() then
-			minetest.chat_send_player(name, "Tutorial World schematic saved")
-		else
-			minetest.chat_send_player(name, "An error occurred while saving Tutorial World schematic")
-		end
-	end,
-})
+-- Add commands for saving map and entities, but only if tutorial mod is trusted
+if insecure_environment then
+	minetest.register_chatcommand("tsave", {
+		params = "",
+		description = "Saves the tutorial map",
+		privs = {tutorialmap=true},
+		func = function(name, param)
+			if save_schematic() then
+				minetest.chat_send_player(name, "Tutorial World schematic saved")
+			else
+				minetest.chat_send_player(name, "An error occurred while saving Tutorial World schematic")
+			end
+		end,
+	})
 
-minetest.register_chatcommand("tsave_entities", {
-	params = "",
-	description = "Saves the tutorial map",
-	privs = {tutorialmap=true},
-	func = function(name, param)
-		for k,s in pairs(tutorial.map_sector) do
-			minetest.forceload_block(s)
-		end
-		local count = save_entities()
-		minetest.chat_send_player(name, count .. " entities saved")
-	end,
-})
+	minetest.register_chatcommand("tsave_entities", {
+		params = "",
+		description = "Saves the tutorial entities",
+		privs = {tutorialmap=true},
+		func = function(name, param)
+			for k,s in pairs(tutorial.map_sector) do
+				minetest.forceload_block(s)
+			end
+			local count = save_entities()
+			minetest.chat_send_player(name, count .. " entities saved")
+		end,
+	})
+end
 
 ------ Map Generation
 
