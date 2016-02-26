@@ -1,10 +1,9 @@
 -- minetest/creative/init.lua
 
 -- intllib support
-local S
+local S, F
 if (minetest.get_modpath("intllib")) then
-	dofile(minetest.get_modpath("intllib").."/intllib.lua")
-	S = intllib.Getter(minetest.get_current_modname())
+	S = intllib.Getter()
 	F = function( s )
 		return minetest.formspec_escape(S(s))
 	end
