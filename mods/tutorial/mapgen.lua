@@ -59,15 +59,7 @@ function save_entities()
 end
 
 function get_saved_entities()
-	local filename = tutorial.map_directory .. "entities"
-	local f, err = io.open(filename, "rb")
-	if not f then
-		minetest.log("action", "[tutorial] Could not open file '" .. filename .. "': " .. err)
-		return {}
-	end
-	local entities = minetest.deserialize(minetest.decompress(f:read("*a")))
-	f:close()
-	return entities
+	return tutorial.entities
 end
 
 function load_entities()
@@ -140,6 +132,31 @@ for x = tutorial.limits[1].x, tutorial.limits[2].x, tutorial.sector_size do
 	end
 end
 --]]
+
+-- Load the sector schematics from disc
+tutorial.sector_data = {}
+for k,sector in pairs(tutorial.map_sector) do
+	local filename = tutorial.map_directory .. "sector_"..k
+	local f, err = io.open(filename..".meta", "rb")
+	if f then
+		local data = minetest.deserialize(minetest.decompress(f:read("*a")))
+		tutorial.sector_data[filename] = data
+		f:close()
+	end
+end
+
+-- Load the entity data from disc
+tutorial.entities = {}
+do
+	local filename = tutorial.map_directory .. "entities"
+	local f, err = io.open(filename, "rb")
+	if not f then
+		minetest.log("action", "[tutorial] Could not open file '" .. filename .. "': " .. err)
+	else
+		tutorial.entities = minetest.deserialize(minetest.decompress(f:read("*a")))
+		f:close()
+	end
+end
 
 function save_schematic()
 	local success = true
@@ -301,14 +318,8 @@ function load_region(minp, filename, vmanip, rotation, replacements, force_place
 		return nil
 	end
 
-	local f, err = io.open(filename..".meta", "rb")
-	if not f then
-		minetest.log("action", "[tutorial] schematic loaded  on ".. minetest.pos_to_string(minp))
-		return true
-	end
-	local data = minetest.deserialize(minetest.decompress(f:read("*a")))
-	f:close()
-	if not data then return end
+	local data = tutorial.sector_data[filename]
+	if not data then return true end
 
 	local get_meta = minetest.get_meta
 
