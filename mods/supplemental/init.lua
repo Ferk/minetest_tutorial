@@ -152,13 +152,14 @@ for v=0,7 do
 		tiles = {"supplemental_testliquid"..v..".png"},
 		special_tiles = {
 			{
-				image="supplemental_testliquid"..v..".png",
+				name="supplemental_testliquid"..v..".png",
 				backface_culling=false,
 			},
 			{
-				image="supplemental_testliquid"..v..".png",
+				name="supplemental_testliquid"..v..".png",
 				backface_culling=true,
 			},
+
 		},
 		alpha = alpha,
 		paramtype = "light",
@@ -180,7 +181,13 @@ for v=0,7 do
 		description = string.format(S("test liquid source %i"), v),
 		inventory_image = minetest.inventorycube("supplemental_testliquid"..v..".png"),
 		drawtype = "liquid",
-		tiles = {"supplemental_testliquid"..v..".png"},
+		special_tiles = {
+			{
+				name="supplemental_testliquid"..v..".png",
+				backface_culling=false,
+			},
+		},
+		tiles = {"supplemental_testliquid"..v..".png",},
 		alpha = alpha,
 		paramtype = "light",
 		walkable = false,
