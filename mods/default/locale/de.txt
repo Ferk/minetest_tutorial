@@ -43,11 +43,11 @@ Active furnace (Flame used: %d%%) (Rightclick to examine) = Aktiver Ofen (Flamme
 Furnace without fuel (Rightclick to examine) = Ofen ohne Brennstoff (Rechtsklicken zum Untersuchen)
 
 # Formspecs
-[left click]: take/drop stack;   [right click]: take half / drop 1;   [middle click]: take 10 / drop 10;   [Esc] or [I]: Close = [Linksklick]: Stapel nehmen/weglegen;   [Rechtsklick]: nimm Hälfte / 1 ablegen;   [Mittelklick]: 10 nehmen/ablegen
+[Left click]: Take/drop stack\n[Right click]: Take half stack / drop 1 item\n[Middle click]: Take/drop 10 items\n[Esc] or [I]: Close = [Linksklick]: Stapel nehmen/ablegen\n[Rechtsklick]: Halben Stapel nehmen / 1 Gegenstand ablegen\n[Mittelklick]: 10 Gegenstände nehmen/ablegen\n[Esc] oder [I]: Schließen
 Chest inventory: = Truheninventar:
 Player inventory: = Spielerinventar:
 This furnace is active and constantly burning its fuel. = Der Ofen ist aktiv und verbrennt beständig seinen Brennstoff.
-This furnace is inactive. Read the instructions to learn how to activate it. = Dieser Ofen ist inaktiv. Lesen Sie die Anweisungen, um zu erfahren, wie er aktiviert werden kann.
+This furnace is inactive. Please read the sign above. = Der Ofen ist inaktiv. Bitte lesen Sie das obige Schild.
 Back to start = Zurück zum Anfang
 Crafting grid: = Fertigungsgitter:
 Output slot: = Resultat:

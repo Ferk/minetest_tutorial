@@ -43,12 +43,12 @@ Active furnace (Flame used: %d%%) (Rightclick to examine)
 Furnace without fuel (Rightclick to examine)
 
 # Formspecs
-## It is okay to shorten the translation if it does not fit into the formspec
-[left click]: take/drop stack;   [right click]: take half / drop 1;   [middle click]: take 10 / drop 10;   [Esc] or [I]: Close
+## Make sure this text fits in nicely even on small resolutions. You have 4 lines.
+[Left click]: Take/drop stack\n[Right click]: Take half stack / drop 1 item\n[Middle click]: Take/drop 10 items\n[Esc] or [I]: Close
 Chest inventory:
 Player inventory:
 This furnace is active and constantly burning its fuel.
-This furnace is inactive. Read the instructions to learn how to activate it.
+This furnace is inactive. Please read the sign above.
 Back to start
 Crafting grid:
 Output slot:

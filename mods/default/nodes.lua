@@ -243,7 +243,7 @@ minetest.register_node("default:torch", {
 
 function default.chest_formspec()
 	return
-	"size[8,9.1]"..
+	"size[8,10.6]"..
 	default.gui_bg..
 	default.gui_bg_img..
 	default.gui_slots..
@@ -254,7 +254,7 @@ function default.chest_formspec()
 	"list[current_player;main;0,6.08;8,3;8]"..
 	"listring[current_name;main]"..
 	"listring[current_player;main]"..
-	"label[0,9;"..default.gui_controls.."]"..
+	"label[0,9.1;"..default.gui_controls.."]"..
 	default.get_hotbar_bg(0,4.85)
 end
 
@@ -295,23 +295,23 @@ minetest.register_node("default:chest", {
 
 function default.furnace_active(pos, percent, item_percent)
     local formspec = 
-	"size[8,8.5]"..
+	"size[8,9.8]"..
 	default.gui_bg..
 	default.gui_bg_img..
 	default.gui_slots..
 	"label[-0.1,-0.3;"..minetest.formspec_escape(S("This furnace is active and constantly burning its fuel.")).."]"..
-	"label[2.75,0.1;"..minetest.formspec_escape(S("Source:")).."]"..
-	"list[current_name;src;2.75,0.5;1,1;]"..
-	"label[2.75,2.5;"..minetest.formspec_escape(S("Fuel:")).."]"..
-	"list[current_name;fuel;2.75,2.9;1,1;]"..
-	"label[2.75,1.3;"..minetest.formspec_escape(S("Flame:")).."]"..
-	"image[2.75,1.7;1,1;default_furnace_fire_bg.png^[lowpart:"..
+	"label[2.25,0.1;"..minetest.formspec_escape(S("Source:")).."]"..
+	"list[current_name;src;2.25,0.5;1,1;]"..
+	"label[2.25,2.5;"..minetest.formspec_escape(S("Fuel:")).."]"..
+	"list[current_name;fuel;2.25,2.9;1,1;]"..
+	"label[2.25,1.3;"..minetest.formspec_escape(S("Flame:")).."]"..
+	"image[2.25,1.7;1,1;default_furnace_fire_bg.png^[lowpart:"..
 	(100-percent)..":default_furnace_fire_fg.png]"..
 	"label[3.75,1.3;"..minetest.formspec_escape(S("Progress:")).."]"..
         "image[3.75,1.7;1,1;gui_furnace_arrow_bg.png^[lowpart:"..
         (item_percent*100)..":gui_furnace_arrow_fg.png^[transformR270]"..
-	"label[4.75,0.76;"..minetest.formspec_escape(S("Output slots:")).."]"..
-	"list[current_name;dst;4.75,1.16;2,2;]"..
+	"label[5.75,0.70;"..minetest.formspec_escape(S("Output slots:")).."]"..
+	"list[current_name;dst;5.75,1.16;2,2;]"..
 	"label[0,3.75;"..minetest.formspec_escape(S("Player inventory:")).."]"..
 	"list[current_player;main;0,4.25;8,1;]"..
 	"list[current_player;main;0,5.5;8,3;8]"..
@@ -319,7 +319,7 @@ function default.furnace_active(pos, percent, item_percent)
 	"listring[current_player;main]"..
 	"listring[current_name;src]"..
 	"listring[current_player;main]"..
-	"label[0,8.4;"..default.gui_controls.."]"..
+	"label[0,8.5;"..default.gui_controls.."]"..
 	default.get_hotbar_bg(0,4.25)
     return formspec
   end
@@ -341,21 +341,21 @@ function default.get_furnace_active_formspec(pos, percent)
 end
 
 default.furnace_inactive_formspec =
-	"size[8,8.5]"..
+	"size[8,9.8]"..
 	default.gui_bg..
 	default.gui_bg_img..
 	default.gui_slots..
-	"label[-0.1,-0.3;"..minetest.formspec_escape(S("This furnace is inactive. Read the instructions to learn how to activate it.")).."]"..
-	"label[2.75,0.1;"..minetest.formspec_escape(S("Source:")).."]"..
-	"list[current_name;src;2.75,0.5;1,1;]"..
-	"label[2.75,2.5;"..minetest.formspec_escape(S("Fuel:")).."]"..
-	"list[current_name;fuel;2.75,2.9;1,1;]"..
-	"label[2.75,1.3;"..minetest.formspec_escape(S("Flame:")).."]"..
-	"image[2.75,1.7;1,1;default_furnace_fire_bg.png]"..
+	"label[-0.1,-0.3;"..minetest.formspec_escape(S("This furnace is inactive. Please read the sign above.")).."]"..
+	"label[2.25,0.1;"..minetest.formspec_escape(S("Source:")).."]"..
+	"list[current_name;src;2.25,0.5;1,1;]"..
+	"label[2.25,2.5;"..minetest.formspec_escape(S("Fuel:")).."]"..
+	"list[current_name;fuel;2.25,2.9;1,1;]"..
+	"label[2.25,1.3;"..minetest.formspec_escape(S("Flame:")).."]"..
+	"image[2.25,1.7;1,1;default_furnace_fire_bg.png]"..
 	"label[3.75,1.3;"..minetest.formspec_escape(S("Progress:")).."]"..
 	"image[3.75,1.7;1,1;gui_furnace_arrow_bg.png^[transformR270]"..
-	"label[4.75,0.76;"..minetest.formspec_escape(S("Output slots:")).."]"..
-	"list[current_name;dst;4.75,1.16;2,2;]"..
+	"label[5.75,0.70;"..minetest.formspec_escape(S("Output slots:")).."]"..
+	"list[current_name;dst;5.75,1.16;2,2;]"..
 	"label[0,3.75;"..minetest.formspec_escape(S("Player inventory:")).."]"..
 	"list[current_player;main;0,4.25;8,1;]"..
 	"list[current_player;main;0,5.5;8,3;8]"..
@@ -363,7 +363,7 @@ default.furnace_inactive_formspec =
 	"listring[current_player;main]"..
 	"listring[current_name;src]"..
 	"listring[current_player;main]"..
-	"label[0,8.4;"..default.gui_controls.."]"..
+	"label[0,8.5;"..default.gui_controls.."]"..
 	default.get_hotbar_bg(0,4.25)
 
 minetest.register_node("default:furnace", {

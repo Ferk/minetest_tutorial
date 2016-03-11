@@ -23,7 +23,7 @@ default = {}
 default.gui_bg = "bgcolor[#080808BB;true]"
 default.gui_bg_img = "background[5,5;1,1;gui_formbg.png;true]"
 default.gui_slots = "listcolors[#00000069;#5A5A5A;#141318;#30434C;#FFF]"
-default.gui_controls = minetest.formspec_escape(S("[left click]: take/drop stack;   [right click]: take half / drop 1;   [middle click]: take 10 / drop 10;   [Esc] or [I]: Close"))
+default.gui_controls = minetest.formspec_escape(S("[Left click]: Take/drop stack\n[Right click]: Take half stack / drop 1 item\n[Middle click]: Take/drop 10 items\n[Esc] or [I]: Close"))
 
 function default.get_hotbar_bg(x,y)
 	local out = ""
@@ -33,15 +33,15 @@ function default.get_hotbar_bg(x,y)
 	return out
 end
 
-default.gui_suvival_form = "size[8,8.5]"..
+default.gui_suvival_form = "size[8,10]"..
 			default.gui_bg..
 			default.gui_bg_img..
 			default.gui_slots..
-			"button_exit[-0.1,-0.3;2,1;gotostart;"..minetest.formspec_escape(S("Back to start")).."]"..
+			"button_exit[-0.1,-0.3;3,1;gotostart;"..minetest.formspec_escape(S("Back to start")).."]"..
 			"label[0,3.75;"..minetest.formspec_escape(S("Player inventory:")).."]"..
 			"list[current_player;main;0,4.25;8,1;]"..
 			"list[current_player;main;0,5.5;8,3;8]"..
-			"label[0,8.4;"..default.gui_controls.."]"..
+			"label[0,8.5;"..default.gui_controls.."]"..
 			"label[2.75,-0.1;"..minetest.formspec_escape(S("Crafting grid:")).."]"..
 			"list[current_player;craft;2.75,0.5;3,3;]"..
 			"label[6.75,0.9;"..minetest.formspec_escape(S("Output slot:")).."]"..
