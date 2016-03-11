@@ -1,4 +1,12 @@
--- minetest/creative/init.lua
+-- tutorial/creative/init.lua
+
+-- intllib support
+local S
+if (minetest.get_modpath("intllib")) then
+	S = intllib.Getter()
+else
+	S = function ( s ) return s end
+end
 
 creative = {}
 local player_inventory = {}
@@ -115,13 +123,13 @@ creative.set_creative_formspec = function(player, start_i, pagenum, tab_id)
 		button[7.25,3.2;0.8,0.9;creative_next;>]
 		button[2.1,3.4;0.8,0.5;creative_search;?]
 		button[2.75,3.4;0.8,0.5;creative_clear;X]
-		tooltip[creative_search;Search]
-		tooltip[creative_clear;Reset]
+		tooltip[creative_search;]]..S("Search")..[[]
+		tooltip[creative_clear;]]..S("Reset")..[[]
 		listring[current_player;main]
 		]] ..
 		"field[0.3,3.5;2.2,1;creative_filter;;".. filter .."]"..
 		"listring[detached:creative_".. player_name ..";main]"..
-		"tabheader[0,0;creative_tabs;Crafting,All,Nodes,Tools,Items;".. tostring(tab_id) ..";true;false]"..
+		"tabheader[0,0;creative_tabs;"..S("Crafting")..","..S("All")..","..S("Nodes")..","..S("Tools")..","..S("Items")..";".. tostring(tab_id) ..";true;false]"..
 		"list[detached:creative_".. player_name ..";main;0,0;8,3;".. tostring(start_i) .."]"..
 		"table[6.05,3.35;1.15,0.5;pagenum;#FFFF00,".. tostring(pagenum) ..",#FFFFFF,/ ".. tostring(pagemax) .."]"..
 		default.get_hotbar_bg(0,4.7)..
