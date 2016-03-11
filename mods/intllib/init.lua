@@ -1,6 +1,6 @@
 
 -- Support the old multi-load method
-intllib = intllib or {}
+if not minetest.global_exists(intllib) then intllib = {} end
 
 local MP = minetest.get_modpath("intllib")
 
