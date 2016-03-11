@@ -147,7 +147,7 @@ creative.set_crafting_formspec = function(player)
 		list[detached:creative_trash;main;0,2.75;1,1;]
 		image[0.06,2.85;0.8,0.8;creative_trash_icon.png]
 		image[5,1.75;1,1;gui_furnace_arrow_bg.png^[transformR270]
-		tabheader[0,0;creative_tabs;Crafting,All,Nodes,Tools,Items;1;true;false]
+		tabheader[0,0;creative_tabs;]]..S("Crafting")..","..S("All")..","..S("Nodes")..","..S("Tools")..","..S("Items")..[[;1;true;false]
 		listring[current_player;main]
 		listring[current_player;craft]
 		]] ..
