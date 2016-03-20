@@ -1,8 +1,7 @@
 -- intllib support
 local S
 if (minetest.get_modpath("intllib")) then
-	dofile(minetest.get_modpath("intllib").."/intllib.lua")
-	S = intllib.Getter(minetest.get_current_modname())
+	S = intllib.Getter()
 else
   S = function ( s ) return s end
 end
@@ -13,8 +12,16 @@ minetest.register_node("supplemental:sticky", {
 		"default_stone_brick.png", "default_stone_brick.png", "default_stone_brick.png",
 		"default_stone_brick.png", "default_stone_brick.png"},
 	groups = {immortal=1, disable_jump=1},
+})
+
+minetest.register_node("supplemental:bouncy", {
+	description = S("bouncy block"),
+	tiles = {"supplemental_bouncy.png"},
+	groups = {immortal=1, bouncy=70, fall_damage_add_percent=-100},
 	sounds = default.node_sound_stone_defaults()
 })
+
+
 
 minetest.register_node("supplemental:conglomerate", {
 	description = S("conglomerate"),
@@ -145,13 +152,14 @@ for v=0,7 do
 		tiles = {"supplemental_testliquid"..v..".png"},
 		special_tiles = {
 			{
-				image="supplemental_testliquid"..v..".png",
+				name="supplemental_testliquid"..v..".png",
 				backface_culling=false,
 			},
 			{
-				image="supplemental_testliquid"..v..".png",
+				name="supplemental_testliquid"..v..".png",
 				backface_culling=true,
 			},
+
 		},
 		alpha = alpha,
 		paramtype = "light",
@@ -173,7 +181,13 @@ for v=0,7 do
 		description = string.format(S("test liquid source %i"), v),
 		inventory_image = minetest.inventorycube("supplemental_testliquid"..v..".png"),
 		drawtype = "liquid",
-		tiles = {"supplemental_testliquid"..v..".png"},
+		special_tiles = {
+			{
+				name="supplemental_testliquid"..v..".png",
+				backface_culling=false,
+			},
+		},
+		tiles = {"supplemental_testliquid"..v..".png",},
 		alpha = alpha,
 		paramtype = "light",
 		walkable = false,

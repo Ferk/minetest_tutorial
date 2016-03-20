@@ -9,7 +9,6 @@ areas.adminPrivs = {areas=true}
 areas.startTime = os.clock()
 
 areas.modpath = minetest.get_modpath("areas")
-dofile(areas.modpath.."/settings.lua")
 dofile(areas.modpath.."/api.lua")
 dofile(areas.modpath.."/internal.lua")
 dofile(areas.modpath.."/hud.lua")

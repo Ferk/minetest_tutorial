@@ -3,6 +3,8 @@
 -- Directory where the map data will be stored
 tutorial.map_directory = minetest.get_modpath("tutorial").."/mapdata/"
 
+local insecure_environment = minetest.request_insecure_environment()
+
 -- entity management functions
 
 function save_entities()
@@ -47,7 +49,7 @@ function save_entities()
 	local str = minetest.serialize(entities)
 
 	local filename = tutorial.map_directory .. "entities"
-	local file, err = io.open(filename, "wb")
+	local file, err = insecure_environment.io.open(filename, "wb")
 	if err ~= nil then
 		error("Couldn't write to \"" .. filename .. "\"")
 	end
@@ -59,15 +61,7 @@ function save_entities()
 end
 
 function get_saved_entities()
-	local filename = tutorial.map_directory .. "entities"
-	local f, err = io.open(filename, "rb")
-	if not f then
-		minetest.log("action", "[tutorial] Could not open file '" .. filename .. "': " .. err)
-		return {}
-	end
-	local entities = minetest.deserialize(minetest.decompress(f:read("*a")))
-	f:close()
-	return entities
+	return tutorial.entities
 end
 
 function load_entities()
@@ -140,6 +134,31 @@ for x = tutorial.limits[1].x, tutorial.limits[2].x, tutorial.sector_size do
 	end
 end
 --]]
+
+-- Load the sector schematics from disc
+tutorial.sector_data = {}
+for k,sector in pairs(tutorial.map_sector) do
+	local filename = tutorial.map_directory .. "sector_"..k
+	local f, err = io.open(filename..".meta", "rb")
+	if f then
+		local data = minetest.deserialize(minetest.decompress(f:read("*a")))
+		tutorial.sector_data[filename] = data
+		f:close()
+	end
+end
+
+-- Load the entity data from disc
+tutorial.entities = {}
+do
+	local filename = tutorial.map_directory .. "entities"
+	local f, err = io.open(filename, "rb")
+	if not f then
+		minetest.log("action", "[tutorial] Could not open file '" .. filename .. "': " .. err)
+	else
+		tutorial.entities = minetest.deserialize(minetest.decompress(f:read("*a")))
+		f:close()
+	end
+end
 
 function save_schematic()
 	local success = true
@@ -256,7 +275,7 @@ function save_region(minp, maxp, probability_list, filename, slice_prob_list)
 		-- Serialize entries
 		result = minetest.serialize(result)
 
-		local file, err = io.open(filename..".meta", "wb")
+		local file, err = insecure_environment.io.open(filename..".meta", "wb")
 		if err ~= nil then
 			error("Couldn't write to \"" .. filename .. "\"")
 		end
@@ -301,14 +320,8 @@ function load_region(minp, filename, vmanip, rotation, replacements, force_place
 		return nil
 	end
 
-	local f, err = io.open(filename..".meta", "rb")
-	if not f then
-		minetest.log("action", "[tutorial] schematic loaded  on ".. minetest.pos_to_string(minp))
-		return true
-	end
-	local data = minetest.deserialize(minetest.decompress(f:read("*a")))
-	f:close()
-	if not data then return end
+	local data = tutorial.sector_data[filename]
+	if not data then return true end
 
 	local get_meta = minetest.get_meta
 
@@ -364,31 +377,34 @@ minetest.register_chatcommand("treset", {
 	end,
 })
 
-minetest.register_chatcommand("tsave", {
-	params = "",
-	description = "Saves the tutorial map",
-	privs = {tutorialmap=true},
-	func = function(name, param)
-		if save_schematic() then
-			minetest.chat_send_player(name, "Tutorial World schematic saved")
-		else
-			minetest.chat_send_player(name, "An error occurred while saving Tutorial World schematic")
-		end
-	end,
-})
+-- Add commands for saving map and entities, but only if tutorial mod is trusted
+if insecure_environment then
+	minetest.register_chatcommand("tsave", {
+		params = "",
+		description = "Saves the tutorial map",
+		privs = {tutorialmap=true},
+		func = function(name, param)
+			if save_schematic() then
+				minetest.chat_send_player(name, "Tutorial World schematic saved")
+			else
+				minetest.chat_send_player(name, "An error occurred while saving Tutorial World schematic")
+			end
+		end,
+	})
 
-minetest.register_chatcommand("tsave_entities", {
-	params = "",
-	description = "Saves the tutorial map",
-	privs = {tutorialmap=true},
-	func = function(name, param)
-		for k,s in pairs(tutorial.map_sector) do
-			minetest.forceload_block(s)
-		end
-		local count = save_entities()
-		minetest.chat_send_player(name, count .. " entities saved")
-	end,
-})
+	minetest.register_chatcommand("tsave_entities", {
+		params = "",
+		description = "Saves the tutorial entities",
+		privs = {tutorialmap=true},
+		func = function(name, param)
+			for k,s in pairs(tutorial.map_sector) do
+				minetest.forceload_block(s)
+			end
+			local count = save_entities()
+			minetest.chat_send_player(name, count .. " entities saved")
+		end,
+	})
+end
 
 ------ Map Generation
 

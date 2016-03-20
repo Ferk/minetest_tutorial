@@ -1,1 +1,7 @@
-Trash:
+Crafting
+All
+Nodes
+Tools
+Items
+Search
+Reset

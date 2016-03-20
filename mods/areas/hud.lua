@@ -1,8 +1,7 @@
 -- intllib support
 local S
 if (minetest.get_modpath("intllib")) then
-	dofile(minetest.get_modpath("intllib").."/intllib.lua")
-	S = intllib.Getter(minetest.get_current_modname())
+	S = intllib.Getter()
 else
   S = function ( s ) return s end
 end
@@ -27,8 +26,8 @@ minetest.register_globalstep(function(dtime)
 				hud_elem_type = "text",
 				name = "Areas",
 				number = 0xFFFFFF,
-				position = {x=1, y=0},
-				offset = {x=-12, y=6},
+				position = {x=1, y=0.25},
+				offset = {x=-12, y=17},
 				text = areaString,
 				scale = {x=200, y=60},
 				alignment = {x=-1, y=1},
