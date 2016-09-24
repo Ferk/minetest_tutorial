@@ -5,106 +5,6 @@ tutorial.map_directory = minetest.get_modpath("tutorial").."/mapdata/"
 
 local insecure_environment = minetest.request_insecure_environment()
 
--- entity management functions
-
-function save_entities()
-	local entities = {}
-	local count = 0;
-
-	for id,entity in pairs(minetest.luaentities) do
-		local entry = {
-			pos = entity.object:getpos(),
-			name = entity.name,
-			staticdata = entity.object:get_luaentity().get_staticdata(entity.object)
-		}
-		if entry.name == "__builtin:item" then
-			entry.itemstring = entity.itemstring
-		end
-		table.insert(entities, entry)
-		count = count+1
-		minetest.log("action", "[tutorial] entity FOUND to be saved: "..(entry.itemstring or entry.name).." at " ..entry.pos.x..","..entry.pos.y..","..entry.pos.z)
-	end
-
-	-- Because the entities can easily be unloaded, we won't override the
-	-- entities save file. Instead, we will try to deduce as best as we can to try
-	-- to include as well the already saved entities without creating duplicates.
-	local saved_entities = get_saved_entities()
-
-	for k,ent in pairs(saved_entities) do
-		local already_added=false
-
-		for k,e in pairs(entities) do
-			if math.abs(ent.pos.x-e.pos.x) + math.abs(ent.pos.y - e.pos.y) + math.abs(ent.pos.z -e.pos.z) < 1 then
-				already_added=true
-				break
-			end
-		end
-		if not already_added then
-			table.insert(entities,ent)
-			count = count + 1
-			minetest.log("action", "[tutorial] entity to CONTINUE saved: "..(ent.itemstring or ent.name).." at " ..ent.pos.x..","..ent.pos.y..","..ent.pos.z)
-		end
-	end
-
-	local str = minetest.serialize(entities)
-
-	local filename = tutorial.map_directory .. "entities"
-	local file, err = insecure_environment.io.open(filename, "wb")
-	if err ~= nil then
-		error("Couldn't write to \"" .. filename .. "\"")
-	end
-	file:write(minetest.compress(str))
-	file:flush()
-	file:close()
-	minetest.log("action","[tutorial] " .. filename .. ": " .. count .. " entities saved")
-	return count
-end
-
-function get_saved_entities()
-	return tutorial.entities
-end
-
-function load_entities()
-	local entities = get_saved_entities()
-
-	local count = 0
-	for k,entity in pairs(entities) do
-		if entity.name == "__builtin:item" then
-			minetest.add_item(entity.pos, entity.itemstring)
-		else
-			local luaentity = minetest.add_entity(entity.pos, entity.name)
-			luaentity.on_activate(luaentity, entity.staticdata)
-		end
-		count = count + 1
-	end
-	minetest.log("action", "[tutorial] " .. count .. " entities loaded")
-end
-
-function load_entities_area(minp, maxp)
-
-	if not tutorial.entities_cache then
-		tutorial.entities_cache = get_saved_entities()
-	end
-
-	local count = 0
-	for k,entity in pairs(tutorial.entities_cache) do
-
-		-- Only load it if not out of the generating range
-		if not ((maxp.x < entity.pos.x) or (minp.x > entity.pos.x)
-			or (maxp.y < entity.pos.y) or (minp.y > entity.pos.y)
-			or (maxp.z < entity.pos.z) or (minp.z > entity.pos.z))
-		then
-			if entity.name == "__builtin:item" then
-				minetest.add_item(entity.pos, entity.itemstring)
-			else
-				local luaentity = minetest.add_entity(entity.pos, entity.name)
-				luaentity.on_activate(luaentity, entity.staticdata)
-			end
-			count = count + 1
-		end
-	end
-	minetest.log("action", "[tutorial] " .. count .. " entities loaded")
-end
 
 ---
 
@@ -143,19 +43,6 @@ for k,sector in pairs(tutorial.map_sector) do
 	if f then
 		local data = minetest.deserialize(minetest.decompress(f:read("*a")))
 		tutorial.sector_data[filename] = data
-		f:close()
-	end
-end
-
--- Load the entity data from disc
-tutorial.entities = {}
-do
-	local filename = tutorial.map_directory .. "entities"
-	local f, err = io.open(filename, "rb")
-	if not f then
-		minetest.log("action", "[tutorial] Could not open file '" .. filename .. "': " .. err)
-	else
-		tutorial.entities = minetest.deserialize(minetest.decompress(f:read("*a")))
 		f:close()
 	end
 end
@@ -356,6 +243,60 @@ function load_region(minp, filename, vmanip, rotation, replacements, force_place
 	return true
 end
 
+------ item management methods
+
+-- save the current items to disk
+function tutorial.save_items()
+	local filename = tutorial.map_directory .. "items"
+	local str = minetest.serialize(tutorial.current_items)
+
+	local file, err = insecure_environment.io.open(filename, "wb")
+	if err ~= nil then
+		error("Couldn't write to \"" .. filename .. "\"")
+	end
+	file:write(minetest.compress(str))
+	file:flush()
+	file:close()
+	minetest.log("action","[tutorial] " .. filename .. ": items saved")
+end
+
+-- This will load the items from disk into the lua table,
+-- but it will not add them to the world.
+function load_items()
+	local filename = tutorial.map_directory .. "items"
+	local f, err = io.open(filename, "rb")
+	if not f then
+		minetest.log("action", "[tutorial] Could not open file '" .. filename .. "': " .. err)
+	else
+		tutorial.current_items = minetest.deserialize(minetest.decompress(f:read("*a")))
+		f:close()
+	end
+	minetest.log("action", "[tutorial] items loaded")
+end
+
+-- This will add to the world those from the lua table between minp and maxp
+function add_items_area(minp, maxp)
+	local count = 0
+	for uid,item in pairs(tutorial.current_items) do
+
+		-- Only load it if not out of the generating range
+		if not ((maxp.x < item.pos.x) or (minp.x > item.pos.x)
+			or (maxp.y < item.pos.y) or (minp.y > item.pos.y)
+			or (maxp.z < item.pos.z) or (minp.z > item.pos.z))
+		then
+			local luaentity = minetest.add_entity(item.pos, "__builtin:item"):get_luaentity()
+			local staticdata = {
+				uid = uid,
+				itemstring = item.itemstring
+			}
+			--minetest.log(minetest.serialize(luaentity))
+			luaentity:on_activate(minetest.serialize(staticdata))
+			count = count + 1
+		end
+	end
+	minetest.log("action", "[tutorial] " .. count .. " items added")
+end
+
 
 ------ Commands
 
@@ -365,15 +306,16 @@ minetest.register_chatcommand("treset", {
 	description = "Resets the tutorial map",
 	privs = {tutorialmap=true},
 	func = function(name, param)
+		--[[
 		if load_schematic() then
 			minetest.chat_send_player(name, "Tutorial World schematic loaded")
 		else
 			minetest.chat_send_player(name, "An error occurred while loading Tutorial World schematic")
 		end
-
+]]
 		-- TODO: right now there's no clear way we can properly remove all entities
-		--remove_entities()
-		--load_entities()
+		load_items()
+		add_items_area(tutorial.limits[1], tutorial.limits[2])
 	end,
 })
 
@@ -392,16 +334,13 @@ if insecure_environment then
 		end,
 	})
 
-	minetest.register_chatcommand("tsave_entities", {
+	minetest.register_chatcommand("tsave_items", {
 		params = "",
-		description = "Saves the tutorial entities",
+		description = "Saves the tutorial items",
 		privs = {tutorialmap=true},
 		func = function(name, param)
-			for k,s in pairs(tutorial.map_sector) do
-				minetest.forceload_block(s)
-			end
-			local count = save_entities()
-			minetest.chat_send_player(name, count .. " entities saved")
+			tutorial.save_items()
+			minetest.chat_send_player(name, " items saved")
 		end,
 	})
 end
@@ -434,9 +373,12 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				local filename = tutorial.map_directory .. "sector_" .. k
 				local loaded = load_region(sector, filename, vm)
 				if loaded then
-					-- Load entities in the area as well, and mark it as loaded
-					load_entities_area(sector, sector.maxp)
-					tutorial.state.loaded[k] = true
+					-- Add items to the area as well, and mark it as loaded
+					-- load_entities_area(sector, sector.maxp)
+					minetest.after(0.5, function()
+						add_items_area(sector, sector.maxp)
+						tutorial.state.loaded[k] = true
+					end)
 				end
 				state_changed = true
 			end
@@ -457,6 +399,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 end)
 
 minetest.register_on_mapgen_init(function(mgparams)
+	load_items()
 	minetest.set_mapgen_params({mgname="singlenode", water_level=-31000, chunksize=(tutorial.sector_size/16)})
 end)
 

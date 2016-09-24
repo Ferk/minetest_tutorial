@@ -1429,5 +1429,7 @@ function tutorial.extract_texts()
 	io.close(file)
 end
 
+
+dofile(minetest.get_modpath("tutorial").."/item_entity.lua")
 -- Load map generation and map data management functions
 dofile(minetest.get_modpath("tutorial").."/mapgen.lua")
