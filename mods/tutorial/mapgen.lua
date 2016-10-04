@@ -372,13 +372,9 @@ minetest.register_on_generated(function(minp, maxp, seed)
 
 				local filename = tutorial.map_directory .. "sector_" .. k
 				local loaded = load_region(sector, filename, vm)
+				add_items_area(sector, sector.maxp)
 				if loaded then
-					-- Add items to the area as well, and mark it as loaded
-					-- load_entities_area(sector, sector.maxp)
-					minetest.after(0.5, function()
-						add_items_area(sector, sector.maxp)
-						tutorial.state.loaded[k] = true
-					end)
+					tutorial.state.loaded[k] = true
 				end
 				state_changed = true
 			end
@@ -405,3 +401,15 @@ end)
 
 -- coordinates for the first time the player spawns
 tutorial.first_spawn = { pos={x=42,y=0.5,z=28}, yaw=(math.pi * 0.5) }
+
+--[[
+minetest.register_lbm({
+	name = "tutorial:add_items",
+	nodenames = {"group:tutorial_sign"},
+	run_at_every_load = true,
+	action = function(pos, node)
+		add_items_area(vector.add(pos, {x=-16,y=-16,z=-16}),
+			vector.add(pos, {x=16,y=16,z=16}))
+	end,
+})
+--]]

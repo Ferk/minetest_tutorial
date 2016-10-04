@@ -6,12 +6,12 @@ tutorial.current_items = {}
 minetest.register_entity(":__builtin:item", {
 	initial_properties = {
 		hp_max = 1,
-		physical = false,
+		physical = true,
 		collide_with_objects = false,
 		collisionbox = {-0.3, -0.3, -0.3, 0.3, 0.3, 0.3},
 		visual = "wielditem",
 		visual_size = {x = 0.4, y = 0.4},
-		textures = {""},
+		--textures = {""},
 		spritediv = {x = 1, y = 1},
 		initial_sprite_basepos = {x = 0, y = 0},
 		--is_visible = false,
@@ -54,7 +54,6 @@ minetest.register_entity(":__builtin:item", {
 			automatic_rotate = math.pi * 0.5,
 		}
 		self.object:set_properties(prop)
-		self:update_current_items()
 	end,
 
 	update_current_items = function(self)
@@ -180,6 +179,7 @@ minetest.register_entity(":__builtin:item", {
 		end
 		local nn = node.name
 		-- If node is not registered or node is walkably solid and resting on nodebox
+		self:update_current_items()
 		local v = self.object:getvelocity()
 		if not core.registered_nodes[nn] or core.registered_nodes[nn].walkable and v.y == 0 then
 			if self.physical_state then
@@ -202,7 +202,7 @@ minetest.register_entity(":__builtin:item", {
 		else
 			if not self.physical_state then
 				self.object:setvelocity({x = 0, y = 0, z = 0})
-				self.object:setacceleration({x = 0, y = -10, z = 0})
+				self.object:setacceleration({x = 0, y = 0, z = 0})
 				self.physical_state = true
 				self.object:set_properties({physical = true})
 			end
