@@ -1,6 +1,6 @@
 
 -- Support the old multi-load method
-if not minetest.global_exists(intllib) then intllib = {} end
+if not minetest.global_exists("intllib") then intllib = {} end
 
 local MP = minetest.get_modpath("intllib")
 
@@ -25,7 +25,7 @@ end
 
 function intllib.Getter(modname)
 	modname = modname or minetest.get_current_modname()
-	if not intllib.getters[modname] then 
+	if not intllib.getters[modname] then
 		local modpath = minetest.get_modpath(modname)
 		if modpath then
 			local filename = modpath.."/locale/"..LANG..".txt"
