@@ -245,57 +245,6 @@ end
 
 ------ item management methods
 
--- save the current items to disk
-function tutorial.save_items()
-	local filename = tutorial.map_directory .. "items"
-	local str = minetest.serialize(tutorial.current_items)
-
-	local file, err = insecure_environment.io.open(filename, "wb")
-	if err ~= nil then
-		error("Couldn't write to \"" .. filename .. "\"")
-	end
-	file:write(minetest.compress(str))
-	file:flush()
-	file:close()
-	minetest.log("action","[tutorial] " .. filename .. ": items saved")
-end
-
--- This will load the items from disk into the lua table,
--- but it will not add them to the world.
-function load_items()
-	local filename = tutorial.map_directory .. "items"
-	local f, err = io.open(filename, "rb")
-	if not f then
-		minetest.log("action", "[tutorial] Could not open file '" .. filename .. "': " .. err)
-	else
-		tutorial.current_items = minetest.deserialize(minetest.decompress(f:read("*a")))
-		f:close()
-	end
-	minetest.log("action", "[tutorial] items loaded")
-end
-
--- This will add to the world those from the lua table between minp and maxp
-function add_items_area(minp, maxp)
-	local count = 0
-	for uid,item in pairs(tutorial.current_items) do
-
-		-- Only load it if not out of the generating range
-		if not ((maxp.x < item.pos.x) or (minp.x > item.pos.x)
-			or (maxp.y < item.pos.y) or (minp.y > item.pos.y)
-			or (maxp.z < item.pos.z) or (minp.z > item.pos.z))
-		then
-			local luaentity = minetest.add_entity(item.pos, "__builtin:item"):get_luaentity()
-			local staticdata = {
-				uid = uid,
-				itemstring = item.itemstring
-			}
-			--minetest.log(minetest.serialize(luaentity))
-			luaentity:on_activate(minetest.serialize(staticdata))
-			count = count + 1
-		end
-	end
-	minetest.log("action", "[tutorial] " .. count .. " items added")
-end
 
 
 ------ Commands
@@ -372,7 +321,6 @@ minetest.register_on_generated(function(minp, maxp, seed)
 
 				local filename = tutorial.map_directory .. "sector_" .. k
 				local loaded = load_region(sector, filename, vm)
-				add_items_area(sector, sector.maxp)
 				if loaded then
 					tutorial.state.loaded[k] = true
 				end
@@ -395,7 +343,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 end)
 
 minetest.register_on_mapgen_init(function(mgparams)
-	load_items()
+	tutorial.load_pending_items()
 	minetest.set_mapgen_params({mgname="singlenode", water_level=-31000, chunksize=(tutorial.sector_size/16)})
 end)
 

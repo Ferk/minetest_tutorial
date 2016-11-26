@@ -1,6 +1,6 @@
 
 -- List of current known items dropped in the world
-tutorial.current_items = {}
+tutorial.items_added = {}
 
 -- custom implementation for __builtin:item
 minetest.register_entity(":__builtin:item", {
@@ -54,9 +54,10 @@ minetest.register_entity(":__builtin:item", {
 			automatic_rotate = math.pi * 0.5,
 		}
 		self.object:set_properties(prop)
+		self:update_items_added()
 	end,
 
-	update_current_items = function(self)
+	update_items_added = function(self)
 		-- ignore if no itemstring
 		if self.itemstring == "" then
 			return
@@ -65,19 +66,21 @@ minetest.register_entity(":__builtin:item", {
 		if not self.uid then
 			repeat
 				self.uid = math.random(1000000,9999999)
-			until not tutorial.current_items[self.uid]
+			until not tutorial.items_added[self.uid]
 			minetest.log("added item [" .. self.uid .. "]: " .. self.itemstring)
 		end
-		-- Update the current_items table
-		tutorial.current_items[self.uid] = {
+		-- Update the items_added table
+		tutorial.items_added[self.uid] = {
 			itemstring = self.itemstring,
 			pos = self.object:getpos()
 		}
+		-- make sure it's no longer in the items_pending table
+		tutorial.state.items_pending[self.uid] = nil
 	end,
 
 	get_staticdata = function(self)
 		if self.uid then
-			self:update_current_items()
+			self:update_items_added()
 			return core.serialize({
 				uid = self.uid,
 				itemstring = self.itemstring,
@@ -179,7 +182,6 @@ minetest.register_entity(":__builtin:item", {
 		end
 		local nn = node.name
 		-- If node is not registered or node is walkably solid and resting on nodebox
-		self:update_current_items()
 		local v = self.object:getvelocity()
 		if not core.registered_nodes[nn] or core.registered_nodes[nn].walkable and v.y == 0 then
 			if self.physical_state then
@@ -221,10 +223,92 @@ minetest.register_entity(":__builtin:item", {
 		self.itemstring = ''
 		self.object:remove()
 
-		-- Remove it also from the current_items table
+		-- Remove it also the item from the current_items table
 		if self.uid then
-			tutorial.current_items[self.uid] = nil
+			tutorial.items_added[self.uid] = nil
 			minetest.log("removed item (" .. self.uid .. "):" .. self.itemstring)
 		end
 	end,
 })
+
+
+-- save the current items to disk
+function tutorial.save_items()
+	local filename = tutorial.map_directory .. "items"
+	local str = minetest.serialize(tutorial.current_items)
+
+	local file, err = insecure_environment.io.open(filename, "wb")
+	if err ~= nil then
+		error("Couldn't write to \"" .. filename .. "\"")
+	end
+	file:write(minetest.compress(str))
+	file:flush()
+	file:close()
+	minetest.log("action","[tutorial] " .. filename .. ": items saved")
+end
+
+-- This will load the items from disk into the lua table,
+-- but it will not add them to the world.
+function tutorial.load_pending_items()
+	if not tutorial.state.items_pending then
+		local filename = tutorial.map_directory .. "items"
+		local f, err = io.open(filename, "rb")
+		if not f then
+			minetest.log("action", "[tutorial] Could not open file '" .. filename .. "': " .. err)
+		else
+			tutorial.state.items_pending = minetest.deserialize(minetest.decompress(f:read("*a")))
+			f:close()
+		end
+		minetest.log("action", "[tutorial] items loaded")
+	end
+end
+
+
+-- This will add to the world those from the lua table between minp and maxp
+function tutorial.add_items_area(minp, maxp)
+	local count_total = 0
+	local count_added = 0
+	for uid,item in pairs(tutorial.state.items_pending) do
+
+		-- Only load it if not out of the generating range
+		if not ((maxp.x < item.pos.x) or (minp.x > item.pos.x)
+			or (maxp.y < item.pos.y) or (minp.y > item.pos.y)
+			or (maxp.z < item.pos.z) or (minp.z > item.pos.z))
+		then
+			local luaentity = minetest.add_entity(item.pos, "__builtin:item"):get_luaentity()
+			if luaentity then
+				local staticdata = {
+					uid = uid,
+					itemstring = item.itemstring
+				}
+				--minetest.log("DDDDD " .. minetest.serialize(luaentity))
+				luaentity:on_activate(minetest.serialize(staticdata))
+				count_added = count_added + 1
+			else
+				minetest.log("failed to add item entity")
+			end
+		end
+		count_total = count_total + 1
+	end
+	minetest.log("action", "[tutorial] " .. count_added .. " items added, " .. (count_total - count_added) .." remaining")
+
+	if count_added > 0 then
+		tutorial.save_state()
+	end
+	-- (count_total == 0) and minetest.unregister_globalstep(add_pending_items_globalstep)
+end
+
+local item_timer = 0
+function add_pending_items_globalstep(dtime)
+	item_timer = item_timer + dtime
+	if item_timer < 2 then
+		return
+	end
+	item_timer = item_timer - 2
+
+	for _, player in pairs(minetest.get_connected_players()) do
+		local pos = vector.round(player:getpos())
+		tutorial.add_items_area(vector.subtract(pos, 32), vector.add(pos, 32))
+	end
+end
+minetest.register_globalstep(add_pending_items_globalstep)
