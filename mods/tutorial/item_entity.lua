@@ -2,6 +2,8 @@
 -- List of current known items dropped in the world
 tutorial.items_added = {}
 
+local insecure_environment = minetest.request_insecure_environment()
+
 -- custom implementation for __builtin:item
 minetest.register_entity(":__builtin:item", {
 	initial_properties = {
@@ -231,11 +233,17 @@ minetest.register_entity(":__builtin:item", {
 	end,
 })
 
-
 -- save the current items to disk
-function tutorial.save_items()
-	local filename = tutorial.map_directory .. "items"
-	local str = minetest.serialize(tutorial.current_items)
+function tutorial.save_items(filename)
+
+	local items_total = {}
+	for k,v in pairs(tutorial.items_added) do
+		 table.insert(items_total, v)
+	end
+	for k,v in pairs(tutorial.state.items_pending) do
+		 table.insert(items_total, v)
+	end
+	local str = minetest.serialize(items_total)
 
 	local file, err = insecure_environment.io.open(filename, "wb")
 	if err ~= nil then
@@ -249,17 +257,21 @@ end
 
 -- This will load the items from disk into the lua table,
 -- but it will not add them to the world.
-function tutorial.load_pending_items()
+function tutorial.load_pending_items(filename)
 	if not tutorial.state.items_pending then
-		local filename = tutorial.map_directory .. "items"
 		local f, err = io.open(filename, "rb")
 		if not f then
-			minetest.log("action", "[tutorial] Could not open file '" .. filename .. "': " .. err)
+			minetest.log("error", "[tutorial] Could not open file '" .. filename .. "': " .. err)
 		else
 			tutorial.state.items_pending = minetest.deserialize(minetest.decompress(f:read("*a")))
 			f:close()
+			if tutorial.state.items_pending then
+				minetest.log("action", "[tutorial] items loaded")
+			else
+				tutorial.state.items_pending = {}
+				minetest.log("error","[tutorial] no items could be loaded, verify validity of " .. filename)
+			end
 		end
-		minetest.log("action", "[tutorial] items loaded")
 	end
 end
 
@@ -268,7 +280,8 @@ end
 function tutorial.add_items_area(minp, maxp)
 	local count_total = 0
 	local count_added = 0
-	for uid,item in pairs(tutorial.state.items_pending) do
+
+	for uid,item in pairs(tutorial.state.items_pending or {}) do
 
 		-- Only load it if not out of the generating range
 		if not ((maxp.x < item.pos.x) or (minp.x > item.pos.x)
@@ -281,7 +294,6 @@ function tutorial.add_items_area(minp, maxp)
 					uid = uid,
 					itemstring = item.itemstring
 				}
-				--minetest.log("DDDDD " .. minetest.serialize(luaentity))
 				luaentity:on_activate(minetest.serialize(staticdata))
 				count_added = count_added + 1
 			else
@@ -290,7 +302,7 @@ function tutorial.add_items_area(minp, maxp)
 		end
 		count_total = count_total + 1
 	end
-	minetest.log("action", "[tutorial] " .. count_added .. " items added, " .. (count_total - count_added) .." remaining")
+	-- minetest.log("action", "[tutorial] " .. count_added .. " items added, " .. (count_total - count_added) .." remaining")
 
 	if count_added > 0 then
 		tutorial.save_state()
@@ -301,14 +313,14 @@ end
 local item_timer = 0
 function add_pending_items_globalstep(dtime)
 	item_timer = item_timer + dtime
-	if item_timer < 2 then
+	if item_timer < 3 then
 		return
 	end
 	item_timer = item_timer - 2
 
 	for _, player in pairs(minetest.get_connected_players()) do
 		local pos = vector.round(player:getpos())
-		tutorial.add_items_area(vector.subtract(pos, 32), vector.add(pos, 32))
+		tutorial.add_items_area(vector.subtract(pos, 16), vector.add(pos, 16))
 	end
 end
 minetest.register_globalstep(add_pending_items_globalstep)

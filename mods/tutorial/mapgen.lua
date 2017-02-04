@@ -5,7 +5,6 @@ tutorial.map_directory = minetest.get_modpath("tutorial").."/mapdata/"
 
 local insecure_environment = minetest.request_insecure_environment()
 
-
 ---
 
 -- Sectors of the map to save/load
@@ -288,7 +287,7 @@ if insecure_environment then
 		description = "Saves the tutorial items",
 		privs = {tutorialmap=true},
 		func = function(name, param)
-			tutorial.save_items()
+			tutorial.save_items(tutorial.map_directory .. "items")
 			minetest.chat_send_player(name, " items saved")
 		end,
 	})
@@ -343,7 +342,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 end)
 
 minetest.register_on_mapgen_init(function(mgparams)
-	tutorial.load_pending_items()
+	tutorial.load_pending_items(tutorial.map_directory .. "items")
 	minetest.set_mapgen_params({mgname="singlenode", water_level=-31000, chunksize=(tutorial.sector_size/16)})
 end)
 
